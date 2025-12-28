@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên hệ - Green&&Blue</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="contact.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo"> <a href="index.html"><img src="imgs/logo.png" alt="" width="60px"></a></div>
+            <div class="logo-section">
+                    <h1 class="site-title" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                        <span class="green">Green</span><span class="organce">&&</span><span class="blue">Blue</span>
+                    </h1>
+            </div>
+            <div class="header-actions">
+                <button class="notification-bell" style="display: none;">
+                    <img src="imgs/bell.png" alt="Bell" width="30" class ="bell-icon">
+                    <span class="notification-badge">3</span>
+                </button>
+                <button class="login-btn" onclick="window.location.href='login.html'">Đăng nhập</button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <ul class="menu">
+                <li data-page="index.html"><a href="index.html">Trang chủ</a></li>
+                <li class="category-menu">
+                    <a href="#" class="category-toggle">Thể loại+</a>
+                    <ul class="category-dropdown" id="categoryDropdown">
+                        <li><a href="#" class="category-filter" data-category="all">Tất cả</a></li>
+                        <li><a href="#" class="category-filter" data-category="DoiSong">Đời sống</a></li>
+                        <li><a href="#" class="category-filter" data-category="LoiSong">Lối sống</a></li>
+                        <li><a href="#" class="category-filter" data-category="KhoaHoc">Khoa học</a></li>
+                        <li><a href="#" class="category-filter" data-category="SucKhoe">Sức khỏe</a></li>
+                        <li><a href="#" class="category-filter" data-category="CongNghe">Công nghệ</a></li>
+                        <li><a href="#" class="category-filter" data-category="KienThuc">Kiến thức</a></li>
+                        <li><a href="#" class="category-filter" data-category="TamLy">Tâm lý</a></li>
+                    </ul>
+                </li>
+                <li data-page="about.html"><a href="about.html">Về chúng tôi</a></li>
+                <li data-page="contact.html"><a href="contact.html">Liên hệ</a></li>
+            </ul>
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                </div>
+                <span class="search-icon">🔍</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="contact-main">
+            <h1 class="contact-title">Liên hệ với chúng tôi</h1>
+            
+            <div class="contact-container">
+                <!-- Contact Card 1 -->
+                <div class="contact-card">
+                    <h3 class="contact-name">Lâm Trung Thảo</h3>
+                    <div class="contact-info">
+                        <p>
+                            <span class="contact-label">Email:</span>
+                            <a href="mailto:lamtrungthaoo@gmail.com">lamtrungthaoo@gmail.com</a>
+                        </p>
+                        <p>
+                            <span class="contact-label">Điện thoại:</span>
+                            <a href="tel:+84987654321">+84 987 654 321</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Contact Card 2 -->
+                <div class="contact-card">
+                    <h3 class="contact-name">Tạ Lê Anh Bảo</h3>
+                    <div class="contact-info">
+                        <p>
+                            <span class="contact-label">Email:</span>
+                            <a href="mailto:taleanhbao@gmail.com">taleanhbao@gmail.com</a>
+                        </p>
+                        <p>
+                            <span class="contact-label">Điện thoại:</span>
+                            <a href="tel:+84912345678">+84 912 345 678</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Contact Card 3 -->
+                <div class="contact-card">
+                    <h3 class="contact-name">Bùi Trung Toán</h3>
+                    <div class="contact-info">
+                        <p>
+                            <span class="contact-label">Email:</span>
+                            <a href="mailto:buittoan@gmail.com">buittoan@gmail.com</a>
+                        </p>
+                        <p>
+                            <span class="contact-label">Điện thoại:</span>
+                            <a href="tel:+84901234567">+84 901 234 567</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="blog.js"></script>
+    <script src="index.js"></script>
+    <script>
+        // Thiết lập menu active cho trang này
+        if (typeof setActiveMenu === 'function') {
+            setActiveMenu();
+        }
+        
+        // Xử lý click vào category toggle để hiển thị/ẩn dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryToggle = document.querySelector('.category-toggle');
+            const categoryMenu = document.querySelector('.category-menu');
+            
+            if (categoryToggle && categoryMenu) {
+                categoryToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    categoryMenu.classList.toggle('active');
+                });
+                
+                // Đóng dropdown khi click ra ngoài
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.category-menu')) {
+                        categoryMenu.classList.remove('active');
+                    }
+                });
+            }
+            
+            const categoryFilters = document.querySelectorAll('.category-filter');
+            categoryFilters.forEach(filter => {
+                filter.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    // Lưu category được chọn vào localStorage
+                    localStorage.setItem('selectedCategory', category);
+                    // Chuyển về trang index
+                    window.location.href = 'index.html';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

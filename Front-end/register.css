@@ -1,0 +1,202 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
+}
+
+.register-container {
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;  
+    overflow-y: auto;  
+}
+
+.register-box {
+    background-color: #fff;
+    border-radius: 0; 
+    padding: 40px 40px;
+    box-shadow: none;
+}
+
+/* Logo */
+.logo-register {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Title */
+.register-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #000;
+}
+
+.green {
+    color: #4CAF50;
+}
+
+.blue {
+    color: #2196F3;
+}
+
+.organce {
+    color: #FF9800;
+}
+
+/* Form */
+.register-form {
+    width: 100%;
+}
+
+/* Input Group */
+.input-group {
+    position: relative;
+    margin-bottom: 35px;
+    min-height: 55px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    background-color: #d9d9d9;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    background-color: #e8e8e8;
+}
+
+.input-group.error input {
+    border-color: #ff0000;
+}
+
+.input-icon {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    cursor: pointer;
+    width: 24px;  
+    height: 24px;  
+    display: flex;  
+    align-items: center;  
+    justify-content: center;  
+}
+
+.input-icon img {
+    width: 24px;
+    height: 24px;
+    display: block;  
+    object-fit: contain;  
+}
+
+.error-message {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 20px;
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.input-group.error .error-message {
+    opacity: 1;
+}
+
+/* Register Button */
+.register-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(33, 150, 243, 0.4);
+}
+
+.register-btn:active {
+    transform: translateY(0);
+}
+
+/* Login Text */
+.login-text {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.login-link {
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.login-link:hover {
+    color: #2196F3;
+}
+
+/* Responsive */
+@media screen and (max-width: 480px) {
+    .register-box {
+        padding: 40px 25px;
+    }
+    
+    .register-title {
+        font-size: 24px;
+    }
+    
+    .input-group input {
+        padding: 12px 45px 12px 15px;
+        font-size: 14px;
+    }
+}
+
+#password,
+#confirmPassword {
+    position: relative;
+}
+
+#password::-ms-reveal,
+#password::-ms-clear,
+#password::-webkit-contacts-auto-fill-button,
+#password::-webkit-credentials-auto-fill-button,
+#confirmPassword::-ms-reveal,
+#confirmPassword::-ms-clear,
+#confirmPassword::-webkit-contacts-auto-fill-button,
+#confirmPassword::-webkit-credentials-auto-fill-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}

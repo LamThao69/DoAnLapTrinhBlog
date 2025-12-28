@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin tài khoản - Green&&Blue</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="account.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo"> <a href="index.html"><img src="imgs/logo.png" alt="" width="60px"></a></div>
+            <div class="logo-section">
+                    <h1 class="site-title" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                        <span class="green">Green</span><span class="organce">&&</span><span class="blue">Blue</span>
+                    </h1>
+            </div>
+            <div class="header-actions">
+                <button class="notification-bell" style="display: none;">
+                    <img src="imgs/bell.png" alt="Bell" width="30" class ="bell-icon">
+                    <span class="notification-badge">3</span>
+                </button>
+                <button class="login-btn" onclick="window.location.href='login.html'">Đăng nhập</button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <ul class="menu">
+                <li data-page="index.html"><a href="index.html">Trang chủ</a></li>
+                <li class="category-menu">
+                    <a href="#" class="category-toggle">Thể loại+</a>
+                    <ul class="category-dropdown" id="categoryDropdown">
+                        <li><a href="#" class="category-filter" data-category="all">Tất cả</a></li>
+                        <li><a href="#" class="category-filter" data-category="DoiSong">Đời sống</a></li>
+                        <li><a href="#" class="category-filter" data-category="LoiSong">Lối sống</a></li>
+                        <li><a href="#" class="category-filter" data-category="KhoaHoc">Khoa học</a></li>
+                        <li><a href="#" class="category-filter" data-category="SucKhoe">Sức khỏe</a></li>
+                        <li><a href="#" class="category-filter" data-category="CongNghe">Công nghệ</a></li>
+                        <li><a href="#" class="category-filter" data-category="KienThuc">Kiến thức</a></li>
+                        <li><a href="#" class="category-filter" data-category="TamLy">Tâm lý</a></li>
+                    </ul>
+                </li>
+                <li data-page="about.html"><a href="about.html">Về chúng tôi</a></li>
+                <li data-page="contact.html"><a href="contact.html">Liên hệ</a></li>
+            </ul>
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                </div>
+                <span class="search-icon">🔍</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="account-wrapper">
+            <!-- Sidebar Left -->
+            <aside class="account-sidebar">
+                <ul class="account-menu">
+                    <li><a href="#" class="menu-link active" data-section="info">Thông tin tài khoản</a></li>
+                    <li><a href="#" class="menu-link" data-section="password">Thay đổi mật khẩu</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="account-main">
+                <!-- Thông tin tài khoản -->
+                <section id="info-section" class="account-section active">
+                    <h2>Thông tin tài khoản</h2>
+                    <form id="accountForm" class="account-form">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="username" placeholder="Nhập username" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" placeholder="Nhập email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Địa chỉ</label>
+                            <input type="text" id="address" placeholder="Nhập địa chỉ" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input type="tel" id="phone" placeholder="Nhập số điện thoại" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Năm sinh</label>
+                            <div class="form-row">
+                                <input type="number" id="birthYear" placeholder="YYYY" min="1900" max="2025" style="flex: 1;">
+                                <div class="radio-group" style="margin-left: 20px;">
+                                    <label class="radio-label">
+                                        <input type="radio" name="gender" value="Nam" checked>
+                                        <span class="radio-custom"></span>
+                                        Nam
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="gender" value="Nữ">
+                                        <span class="radio-custom"></span>
+                                        Nữ
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-save">Lưu</button>
+                    </form>
+                </section>
+
+                <!-- Thay đổi mật khẩu -->
+                <section id="password-section" class="account-section">
+                    <h2>Thay đổi mật khẩu</h2>
+                    <form id="passwordForm" class="account-form">
+                        <div class="form-group">
+                            <label>Mật khẩu hiện tại</label>
+                            <input type="password" id="currentPassword" placeholder="Nhập mật khẩu hiện tại" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mật khẩu mới</label>
+                            <input type="password" id="newPassword" placeholder="Nhập mật khẩu mới (tối thiểu 8 ký tự)" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Xác nhận mật khẩu mới</label>
+                            <input type="password" id="confirmNewPassword" placeholder="Xác nhận mật khẩu mới" required>
+                        </div>
+
+                        <button type="submit" class="btn-save">Cập nhật mật khẩu</button>
+                    </form>
+                </section>
+            </main>
+
+            <!-- Sidebar Right -->
+            <aside class="account-avatar-section">
+                <div class="avatar-container">
+                    <img id="avatarImg" src="imgs/account.png" alt="Avatar" class="avatar-img">
+                </div>
+                <button type="button" class="btn-upload">Tải ảnh lên</button>
+                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+            </aside>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+    <script src="account.js"></script>
+    <script>
+        // Thiết lập menu active cho trang này
+        if (typeof setActiveMenu === 'function') {
+            setActiveMenu();
+        }
+    </script>
+</body>
+</html>

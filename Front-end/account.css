@@ -1,0 +1,311 @@
+/* Account Page */
+.account-wrapper {
+    display: grid;
+    grid-template-columns: 200px 1fr 250px;
+    gap: 30px;
+    padding: 40px 5%;
+    min-height: 60vh;
+}
+
+/* Sidebar Left */
+.account-sidebar {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    height: fit-content;
+}
+
+.account-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.account-menu li {
+    margin-bottom: 10px;
+}
+
+.account-menu li:last-child {
+    margin-bottom: 0;
+}
+
+.menu-link {
+    display: block;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.menu-link:hover {
+    background-color: #e8e8e8;
+    color: #2196F3;
+}
+
+.menu-link.active {
+    background-color: #d3d3d3;
+    color: #000;
+}
+
+/* Main Content */
+.account-main {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+}
+
+.account-section {
+    display: none;
+}
+
+.account-section.active {
+    display: block;
+}
+
+.account-section h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #000;
+}
+
+.account-form {
+    max-width: 600px;
+}
+
+.account-form button {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #2196F3;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.form-row input[type="number"] {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    gap: 8px;
+}
+
+.radio-label input[type="radio"] {
+    display: none;
+}
+
+.radio-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.radio-label input[type="radio"]:checked + .radio-custom {
+    border-color: #000;
+    background-color: #000;
+    box-shadow: inset 0 0 0 3px #fff;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    border: none;
+    padding: 12px 80px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+    margin-top: 20px;
+    white-space: nowrap;
+    min-width: auto;
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(33, 150, 243, 0.4);
+}
+
+.btn-save:active {
+    transform: translateY(0);
+}
+
+/* Sidebar Right - Avatar */
+.account-avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.avatar-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #63B4FF, #2196F3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-upload {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+    white-space: nowrap;
+}
+
+.btn-upload:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(33, 150, 243, 0.4);
+}
+
+.btn-upload:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .account-wrapper {
+        grid-template-columns: 150px 1fr;
+        gap: 20px;
+    }
+
+    .account-avatar-section {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .account-wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .account-sidebar {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .account-menu {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .account-menu li {
+        margin-bottom: 0;
+        flex: 1;
+    }
+
+    .menu-link {
+        padding: 10px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .account-main {
+        padding: 20px;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .radio-group {
+        margin-left: 0 !important;
+    }
+
+    .account-avatar-section {
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .account-wrapper {
+        padding: 20px 15px;
+    }
+
+    .account-main {
+        padding: 15px;
+    }
+
+    .account-section h2 {
+        font-size: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn-save, .btn-upload {
+        width: 100%;
+    }
+}

@@ -1,0 +1,252 @@
+/* Post Detail Page */
+.post-detail-main {
+    padding: 40px 5%;
+    min-height: 80vh;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #2196F3;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 30px;
+    transition: all 0.3s;
+    font-size: 16px;
+}
+
+.btn-back:hover {
+    color: #1976D2;
+    transform: translateX(-5px);
+}
+
+.back-arrow {
+    font-size: 20px;
+}
+
+/* Post Detail Article */
+.post-detail-article {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.post-detail-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+.post-detail-meta {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.post-detail-author {
+    color: #FF9800;
+    font-weight: 600;
+}
+
+.post-detail-categories {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.post-detail-category {
+    display: inline-block;
+    font-size: 13px;
+    color: #2196F3;
+    font-weight: 500;
+    padding: 5px 12px;
+    background-color: #E3F2FD;
+    border-radius: 20px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.post-detail-category:hover {
+    background-color: #2196F3;
+    color: white;
+}
+
+.post-detail-image {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    max-height: 500px;
+}
+
+.post-detail-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-detail-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+.post-detail-content p {
+    margin-bottom: 20px;
+}
+
+.post-detail-content h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #000;
+    margin: 30px 0 15px 0;
+}
+
+/* Comments Section */
+.comments-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-top: 40px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.comments-section h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 25px;
+}
+
+.comment-form {
+    margin-bottom: 40px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.3s;
+    resize: vertical;
+}
+
+.comment-form textarea:focus {
+    border-color: #2196F3;
+}
+
+.btn-submit-comment {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+    margin-top: 15px;
+}
+
+.btn-submit-comment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(33, 150, 243, 0.4);
+}
+
+.comments-list {
+    margin-top: 30px;
+}
+
+.comment-item {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.comment-date {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.comment-text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .post-detail-main {
+        padding: 20px 5%;
+    }
+
+    .post-detail-title {
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    .post-detail-image {
+        margin-bottom: 30px;
+    }
+
+    .post-detail-content {
+        font-size: 15px;
+    }
+
+    .comments-section h2 {
+        font-size: 24px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .post-detail-title {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .post-detail-meta {
+        font-size: 12px;
+    }
+
+    .post-detail-image {
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
+
+    .post-detail-content {
+        font-size: 14px;
+    }
+
+    .btn-back {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .comment-form textarea {
+        min-height: 100px;
+        font-size: 13px;
+    }
+
+    .btn-submit-comment {
+        width: 100%;
+        padding: 10px 20px;
+    }
+}

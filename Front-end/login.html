@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Green&&Blue</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <!-- Logo -->
+            <div class="logo-login"> <a href="index.html"><img src="imgs/logo.png" alt="" width="50px"></a></div>
+            
+            <!-- Title -->
+            <h1 class="login-title">
+                Đăng nhập vào <span class="green">Green</span><span class="organce">&&</span><span class="blue">Blue</span>
+            </h1>
+            
+            <!-- Login Form -->
+            <form class="login-form" id="loginForm" novalidate>
+                <!-- Email Input -->
+                <div class="input-group">
+                    <input type="email" id="email" placeholder="Email">
+                    <span class="input-icon">
+                        <img src="imgs/user.png" alt="User">
+                    </span>
+                    <span class="error-message" id="emailError">Vui lòng nhập email của bạn</span>
+                </div>
+                
+                <!-- Password Input -->
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password">
+                    <span class="input-icon toggle-password">
+                        <img src="imgs/hidden.png" alt="Toggle Password" id="eyeIcon">
+                    </span>
+                    <span class="error-message" id="passwordError">Vui lòng nhập password của bạn</span>
+                </div>
+                
+                <!-- General Error Message -->
+                <div class="general-error" id="generalError">Email hoặc password nhập sai</div>
+                
+                <!-- Remember & Forgot -->
+                <div class="options">
+                    <label class="remember">
+                        <input type="checkbox" id="remember">
+                        <span>Ghi nhớ đăng nhập</span>
+                    </label>
+                    <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                </div>
+                
+                <!-- Login Button -->
+                <button type="submit" class="login-btn">Đăng Nhập</button>
+                
+                <!-- Sign Up Link -->
+                <p class="signup-text">
+                    Không có tài khoản? <a href="register.html" class="signup-link">Đăng ký</a>
+                </p>
+                
+                <!-- Divider -->
+                <div class="divider">
+                    <span>Sign in with</span>
+                </div>
+                
+                <!-- Social Login -->
+                <div class="social-login">
+                    <a href="#" class="social-btn facebook">
+                        <img src="imgs/facebook.png" alt="Facebook">
+                    </a>
+                    <a href="#" class="social-btn google">
+                        <img src="imgs/google.png" alt="Google">
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="login.js"></script>
+</body>
+</html>

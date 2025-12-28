@@ -25,70 +25,44 @@ const emailError = document.getElementById('emailError');
 const passwordError = document.getElementById('passwordError');
 const generalError = document.getElementById('generalError');
 
-loginForm.addEventListener('submit', function(e) {
+loginForm.addEventListener('submit', async function(e) {
     e.preventDefault();
-    
-    let isValid = true;
-    
-    // Reset tất cả errors
-    emailInput.parentElement.classList.remove('error');
-    passwordInput.parentElement.classList.remove('error');
-    generalError.classList.remove('show');
-    
-    // Kiểm tra trường rỗng
-    if (emailInput.value.trim() === '' && passwordInput.value.trim() === '') {
-        // Cả 2 trường đều rỗng
-        emailInput.parentElement.classList.add('error');
-        passwordInput.parentElement.classList.add('error');
-        emailError.textContent = 'Vui lòng nhập email của bạn';
-        passwordError.textContent = 'Vui lòng nhập password của bạn';
+
+    // Simple client-side validation
+    if (emailInput.value.trim() === '' || passwordInput.value.trim() === '') {
+        generalError.classList.add('show');
+        generalError.textContent = 'Vui lòng nhập email và password';
         return;
     }
-    
-    if (emailInput.value.trim() === '') {
-        // Chỉ email rỗng
-        emailInput.parentElement.classList.add('error');
-        emailError.textContent = 'Vui lòng nhập email của bạn';
-        return;
-    }
-    
-    if (passwordInput.value.trim() === '') {
-        // Chỉ password rỗng
-        passwordInput.parentElement.classList.add('error');
-        passwordError.textContent = 'Vui lòng nhập password của bạn';
-        return;
-    }
-    
-    // Kiểm tra định dạng email
     if (!isValidEmail(emailInput.value)) {
         emailInput.parentElement.classList.add('error');
         emailError.textContent = 'Email không hợp lệ';
         return;
     }
-    
-    // Kiểm tra nếu là admin
-    const adminEmail = 'admin@gmail.com';
-    const adminPassword = 'admin';
-    
-    if (emailInput.value === adminEmail && passwordInput.value === adminPassword) {
-        // Đăng nhập admin
-        localStorage.setItem('isAdminLoggedIn', 'true');
-        localStorage.setItem('adminEmail', emailInput.value);
-        alert('Đăng nhập admin thành công!');
-        window.location.href = 'admin.html';
-    } else {
-        // Đăng nhập user thường
-        const userData = {
-            email: emailInput.value,
-            password: passwordInput.value,
-            remember: document.getElementById('remember').checked
-        };
-        localStorage.setItem('currentUser', JSON.stringify(userData));
+
+    try {
+        const resp = await fetch(`${window.API_BASE}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include', // include cookies (HttpOnly)
+            body: JSON.stringify({ email: emailInput.value, password: passwordInput.value })
+        });
+        if (!resp.ok) {
+            const data = await resp.json().catch(() => ({}));
+            generalError.classList.add('show');
+            generalError.textContent = data.message || 'Đăng nhập thất bại';
+            return;
+        }
+        const data = await resp.json();
+        // Backend sets HttpOnly cookie; store minimal user info locally for UI
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
         localStorage.setItem('isLoggedIn', 'true');
-        
-        // Hiển thị thành công và chuyển trang
         alert('Đăng nhập thành công!');
-        window.location.href = 'index.html';
+        if (data.user && data.user.role === 'admin') window.location.href = 'admin.html';
+        else window.location.href = 'index.html';
+    } catch (err) {
+        generalError.classList.add('show');
+        generalError.textContent = 'Lỗi mạng, thử lại sau';
     }
 });
 

@@ -3,48 +3,119 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set active menu item dựa trên trang hiện tại
     setActiveMenu();
     
-    const selectedPost = JSON.parse(localStorage.getItem('selectedPost'));
+    const query = new URLSearchParams(window.location.search);
+    const id = query.get('id');
     const postDetail = document.getElementById('postDetail');
-    
-    if (selectedPost && postDetail) {
-        // Render categories
-        const categoriesHtml = selectedPost.category.map(cat => `<span class="post-detail-category">#${cat}</span>`).join('');
-        
+    if (!id || !postDetail) {
+        if (postDetail) postDetail.innerHTML = '<p style="text-align:center;color:#999;">Không tìm thấy bài viết</p>';
+        return;
+    }
+
+    // Fetch post detail from backend
+    try {
+        const resp = await fetch(`${window.API_BASE}/posts/${id}`);
+        if (!resp.ok) {
+            postDetail.innerHTML = '<p style="text-align:center;color:#999;">Không tìm thấy bài viết</p>';
+            return;
+        }
+        const data = await resp.json();
+        const selectedPost = data.post;
+        const comments = data.comments || [];
+
+        const categoriesHtml = selectedPost.category ? (Array.isArray(selectedPost.category) ? selectedPost.category.map(cat => `<span class="post-detail-category">#${cat}</span>`).join('') : `<span class="post-detail-category">#${selectedPost.category}</span>`) : '';
+
         const postHTML = `
             <h1 class="post-detail-title">${selectedPost.title}</h1>
             <p class="post-detail-meta">
-                PUBLISHED ${selectedPost.date} - BY <span class="post-detail-author">${selectedPost.author}</span>
+                PUBLISHED ${new Date(selectedPost.published_at || Date.now()).toLocaleDateString('en-US').toUpperCase()} - BY <span class="post-detail-author">${selectedPost.author || ''}</span>
             </p>
             <div class="post-detail-categories">
                 ${categoriesHtml}
             </div>
             <div class="post-detail-image">
-                <img src="${selectedPost.image}" alt="${selectedPost.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="imgs/anhBlog1.jpg" alt="${selectedPost.title}" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="post-detail-content">
-                <p>${selectedPost.description}</p>
-                <p>${selectedPost.content}</p>
-                <p>
-                    Đây là nội dung chi tiết của bài viết "${selectedPost.title}". 
-                    Bạn có thể sửa nội dung này trong phần quản lý bài viết hoặc kết nối với database để lưu trữ nội dung thực tế.
-                </p>
+                <p>${selectedPost.excerpt || ''}</p>
+                <p>${selectedPost.content || ''}</p>
             </div>
         `;
-        
+
         postDetail.innerHTML = postHTML;
-        
-        // Update page title
         document.title = selectedPost.title + ' - Green&&Blue';
-    } else {
-        postDetail.innerHTML = '<p style="text-align: center; color: #999;">Không tìm thấy bài viết</p>';
+
+        // Render comments
+        const commentsList = document.getElementById('commentsList');
+        if (commentsList) {
+            localRenderComments(comments);
+        }
+
+        // Bind comment submit
+        const commentForm = document.getElementById('commentForm');
+        if (commentForm) {
+            commentForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const textarea = document.querySelector('.comment-form textarea');
+                const content = textarea.value.trim();
+                if (!content) { alert('Vui lòng nhập bình luận'); return; }
+                try {
+                    const r = await fetch(`${window.API_BASE}/posts/${id}/comments`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content }) });
+                    if (!r.ok) {
+                        const err = await r.json().catch(()=>({}));
+                        alert(err.message || 'Gửi bình luận thất bại');
+                        return;
+                    }
+                    textarea.value = '';
+                    // reload comments
+                    const refreshed = await fetch(`${window.API_BASE}/posts/${id}`);
+                    const newData = await refreshed.json();
+                    localRenderComments(newData.comments || []);
+                    alert('Bình luận đã được gửi!');
+                } catch (err) {
+                    console.error(err);
+                    alert('Lỗi mạng, thử lại');
+                }
+            });
+        }
+
+    } catch (err) {
+        console.error('Post load error', err);
+        postDetail.innerHTML = '<p style="text-align:center;color:#999;">Không tải được bài viết</p>';
+    }
+
+    function localRenderComments(comments) {
+        const commentsList = document.getElementById('commentsList');
+        if (!commentsList) return;
+        if (!comments || comments.length === 0) {
+            commentsList.innerHTML = '<p style="color: #999; text-align: center;">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>';
+            return;
+        }
+        commentsList.innerHTML = '';
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        comments.forEach((c, index) => {
+            const isCommentAuthor = currentUser && currentUser.id === c.user_id;
+            const commentHTML = `
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <img src="imgs/account.png" alt="${c.user_id}" class="comment-avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                        <div class="comment-info">
+                            <div class="comment-author">${c.user_id}</div>
+                            <div class="comment-date">${new Date(c.created_at).toLocaleString()}</div>
+                        </div>
+                        ${isCommentAuthor ? `<button class="btn-delete-comment" onclick="deleteComment(${c.id})" title="Xóa bình luận">×</button>` : ''}
+                    </div>
+                    <div class="comment-text">${c.content}</div>
+                </div>
+            `;
+            commentsList.innerHTML += commentHTML;
+        });
     }
     
     // Handle comment form
     const commentForm = document.getElementById('commentForm');
     if (commentForm) {
         commentForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            addComment();
+            // handled above in the main DOMContentLoaded
         });
     }
     
@@ -57,136 +128,61 @@ document.addEventListener('DOMContentLoaded', function() {
             filterBlogByCategory(category);
         });
     });
-    
-    // Load comments
-    loadComments();
 });
 
-// Hàm thêm bình luận
-function addComment() {
-    const textarea = document.querySelector('.comment-form textarea');
-    const commentText = textarea.value.trim();
-    
-    if (!commentText) {
-        alert('Vui lòng nhập bình luận');
-        return;
+// Hàm xóa bình luận qua API
+async function deleteComment(commentId) {
+    if (!confirm('Bạn có chắc muốn xóa bình luận này?')) return;
+    try {
+        const query = new URLSearchParams(window.location.search);
+        const postId = query.get('id');
+        const r = await fetch(`${window.API_BASE}/posts/${postId}/comments/${commentId}`, { method: 'DELETE', credentials: 'include' });
+        if (!r.ok) {
+            const err = await r.json().catch(()=>({}));
+            alert(err.message || 'Xóa thất bại');
+            return;
+        }
+        // Reload comments
+        const refreshed = await fetch(`${window.API_BASE}/posts/${postId}`);
+        const newData = await refreshed.json();
+        const commentsList = document.getElementById('commentsList');
+        if (commentsList) {
+            localRenderComments(newData.comments || []);
+        }
+        alert('Bình luận đã được xóa!');
+    } catch (err) {
+        console.error('Delete comment error', err);
+        alert('Lỗi mạng, thử lại');
     }
-    
-    // Lấy user info
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    const userEmail = currentUser ? currentUser.email : 'Anonymous';
-    const userAvatar = localStorage.getItem('userAvatar') || 'imgs/account.png';
-    const userName = currentUser ? (currentUser.name || userEmail.split('@')[0]) : 'Anonymous';
-    
-    // Tạo comment object
-    const comment = {
-        id: Date.now(),
-        author: userName,
-        email: userEmail,
-        avatar: userAvatar,
-        text: commentText,
-        date: new Date().toLocaleString('vi-VN'),
-        likes: []
-    };
-    
-    // Lưu comment vào localStorage
-    const selectedPost = JSON.parse(localStorage.getItem('selectedPost'));
-    let comments = JSON.parse(localStorage.getItem(`comments_${selectedPost.id}`)) || [];
-    comments.push(comment);
-    localStorage.setItem(`comments_${selectedPost.id}`, JSON.stringify(comments));
-    
-    // Reset form
-    textarea.value = '';
-    
-    // Reload comments
-    loadComments();
-    alert('Bình luận đã được gửi!');
 }
 
-// Hàm load bình luận
-function loadComments() {
-    const selectedPost = JSON.parse(localStorage.getItem('selectedPost'));
+// Helper render comments (reusable)
+function localRenderComments(comments) {
     const commentsList = document.getElementById('commentsList');
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    
-    if (!selectedPost || !commentsList) return;
-    
-    const comments = JSON.parse(localStorage.getItem(`comments_${selectedPost.id}`)) || [];
-    
-    if (comments.length === 0) {
+    if (!commentsList) return;
+    if (!comments || comments.length === 0) {
         commentsList.innerHTML = '<p style="color: #999; text-align: center;">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</p>';
         return;
     }
-    
     commentsList.innerHTML = '';
-    comments.forEach((comment, index) => {
-        const isCommentAuthor = currentUser && currentUser.email === comment.email;
-        const commentLikesCount = comment.likes ? comment.likes.length : 0;
-        const isLiked = comment.likes && currentUser && comment.likes.includes(currentUser.email);
-        
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    comments.forEach((c, index) => {
+        const isCommentAuthor = currentUser && currentUser.id === c.user_id;
         const commentHTML = `
             <div class="comment-item">
                 <div class="comment-header">
-                    <img src="${comment.avatar}" alt="${comment.author}" class="comment-avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                    <img src="imgs/account.png" alt="${c.user_id}" class="comment-avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
                     <div class="comment-info">
-                        <div class="comment-author">${comment.author}</div>
-                        <div class="comment-date">${comment.date}</div>
+                        <div class="comment-author">${c.user_id}</div>
+                        <div class="comment-date">${new Date(c.created_at).toLocaleString()}</div>
                     </div>
-                    ${isCommentAuthor ? `<button class="btn-delete-comment" onclick="deleteComment(${index})" title="Xóa bình luận">×</button>` : ''}
+                    ${isCommentAuthor ? `<button class="btn-delete-comment" onclick="deleteComment(${c.id})" title="Xóa bình luận">×</button>` : ''}
                 </div>
-                <div class="comment-text">${comment.text}</div>
-                <div class="comment-actions">
-                    <button class="btn-like-comment ${isLiked ? 'liked' : ''}" onclick="likeComment(${index})">
-                        ❤️ ${commentLikesCount > 0 ? commentLikesCount : ''}
-                    </button>
-                </div>
+                <div class="comment-text">${c.content}</div>
             </div>
         `;
         commentsList.innerHTML += commentHTML;
     });
-}
-
-// Hàm xóa bình luận
-function deleteComment(commentIndex) {
-    const selectedPost = JSON.parse(localStorage.getItem('selectedPost'));
-    let comments = JSON.parse(localStorage.getItem(`comments_${selectedPost.id}`)) || [];
-    
-    comments.splice(commentIndex, 1);
-    localStorage.setItem(`comments_${selectedPost.id}`, JSON.stringify(comments));
-    
-    loadComments();
-    alert('Bình luận đã được xóa!');
-}
-
-// Hàm like/unlike bình luận
-function likeComment(commentIndex) {
-    const selectedPost = JSON.parse(localStorage.getItem('selectedPost'));
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    
-    if (!currentUser) {
-        alert('Vui lòng đăng nhập để like bình luận');
-        return;
-    }
-    
-    let comments = JSON.parse(localStorage.getItem(`comments_${selectedPost.id}`)) || [];
-    const comment = comments[commentIndex];
-    
-    if (!comment.likes) {
-        comment.likes = [];
-    }
-    
-    const likeIndex = comment.likes.indexOf(currentUser.email);
-    
-    if (likeIndex > -1) {
-        // Nếu đã like, xóa like
-        comment.likes.splice(likeIndex, 1);
-    } else {
-        // Nếu chưa like, thêm like
-        comment.likes.push(currentUser.email);
-    }
-    
-    localStorage.setItem(`comments_${selectedPost.id}`, JSON.stringify(comments));
-    loadComments();
 }
 
 // Hàm set active menu item dựa trên trang hiện tại

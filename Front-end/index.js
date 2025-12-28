@@ -1,8 +1,8 @@
 // Kiểm tra user đã đăng nhập hay chưa
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     // Set active menu item dựa trên trang hiện tại
     setActiveMenu();
-    
+
     // Kiểm tra xem có category được chọn từ các trang khác không
     const selectedCategory = localStorage.getItem('selectedCategory');
     if (selectedCategory) {
@@ -11,12 +11,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // Lọc bài viết theo category
         filterBlogByCategory(selectedCategory);
     }
-    
+
+    // Fetch current user from backend (cookie-based auth)
+    try {
+        const resp = await fetch(`${window.API_BASE}/auth/me`, { credentials: 'include' });
+        if (resp.ok) {
+            const data = await resp.json();
+            if (data.user) {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
+            } else {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUser');
+            }
+        }
+    } catch (err) {
+        // ignore network errors here
+    }
+
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const loginBtn = document.querySelector('.login-btn');
     const notificationBell = document.querySelector('.notification-bell');
-    
+
     // Handle category filter
     const categoryFilters = document.querySelectorAll('.category-filter');
     categoryFilters.forEach(filter => {
@@ -26,12 +43,12 @@ document.addEventListener('DOMContentLoaded', function() {
             filterBlogByCategory(category);
         });
     });
-    
+
     if (isLoggedIn === 'true' && currentUser) {
         // User đã đăng nhập
         const userEmail = currentUser.email;
         const userAvatar = localStorage.getItem('userAvatar');
-        
+
         // Thay đổi nút login thành user icon
         if (userAvatar) {
             // Nếu có ảnh avatar, hiển thị ảnh đó
@@ -40,17 +57,17 @@ document.addEventListener('DOMContentLoaded', function() {
             // Nếu không có ảnh, hiển thị ảnh mặc định
             loginBtn.innerHTML = `<img src="imgs/account.png" alt="User" width="44" height="44" class="user-icon">`;
         }
-        
+
         loginBtn.classList.add('user-logged-in');
         loginBtn.onclick = null;
-        
+
         // Thêm menu dropdown khi click vào user
         loginBtn.style.cursor = 'pointer';
         loginBtn.addEventListener('click', function(e) {
             e.preventDefault();
             showUserMenu();
         });
-        
+
         // Hiển thị notification bell
         if (notificationBell) {
             notificationBell.style.display = 'flex';
@@ -61,6 +78,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+// Hàm đăng xuất
+function logout(event) {
+    event.preventDefault();
+    fetch(`${window.API_BASE}/auth/logout`, { method: 'POST', credentials: 'include' })
+      .catch(() => {})
+      .finally(() => {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        alert('Đăng xuất thành công!');
+        window.location.reload();
+      });
+}
 
 // Hiển thị menu người dùng
 function showUserMenu() {

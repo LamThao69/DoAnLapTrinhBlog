@@ -1,152 +1,87 @@
-// Dữ liệu bài viết tạm thời (sẽ thay bằng database sau)
-const blogPosts = [
-    {
-        id: 1,
-        title: 'Nhiều người trẻ theo đuổi trào lưu sống tích cực trong năm mới',
-        author: 'LÂM THẢO',
-        date: 'OCTOBER 9, 2025',
-        category: ['LoiSong', 'TamLy'],
-        image: 'imgs/anhBlog1.jpg',
-        description: 'Trong bối cảnh nhiều người trẻ chuyển đổi về tư duy nhân thức, thương hiệu Trung Nguyễn Legend đã đưa ra thông điệp "Lối sống Cà phê - Lối sống Thành công - Lối sống Tích cực", tạo ra hương thơm trong công đồng...',
-        content: 'Nội dung đầy đủ của bài viết sẽ được hiển thị ở trang chi tiết bài viết...'
-    },
-    {
-        id: 2,
-        title: 'Xu hướng đọc sách của người trẻ Việt Nam năm 2025',
-        author: 'NGUYỄN VĂN A',
-        date: 'OCTOBER 15, 2025',
-        category: ['DoiSong', 'KienThuc'],
-        image: 'imgs/anhBlog2.jpg',
-        description: 'Theo các nghiên cứu gần đây, số lượng người trẻ Việt Nam yêu thích đọc sách đang tăng đáng kể. Các thể loại sách tự giúp đỡ, phát triển bản thân đang dẫn đầu trong danh sách bán chạy...',
-        content: 'Nội dung đầy đủ của bài viết sẽ được hiển thị ở trang chi tiết bài viết...'
-    },
-    {
-        id: 3,
-        title: 'Cách tạo thói quen đọc sách hiệu quả cho bản thân',
-        author: 'TRẦN THỊ B',
-        date: 'OCTOBER 20, 2025',
-        category: ['KhoaHoc', 'SucKhoe'],
-        image: 'imgs/anhBlog3.jpg',
-        description: 'Đọc sách là một trong những cách tốt nhất để học hỏi và phát triển bản thân. Nhưng làm sao để tạo thói quen đọc sách mỗi ngày? Bài viết này sẽ chia sẻ một số bí quyết hữu ích...',
-        content: 'Nội dung đầy đủ của bài viết sẽ được hiển thị ở trang chi tiết bài viết...'
-    },
-    {
-        id: 4,
-        title: 'Top 10 cuốn sách hay nhất năm 2025 không nên bỏ qua',
-        author: 'LÊ MINH C',
-        date: 'OCTOBER 25, 2025',
-        category: ['DoiSong', 'CongNghe'],
-        image: 'imgs/anhBlog4.jpg',
-        description: 'Dưới đây là danh sách 10 cuốn sách xuất sắc nhất được phát hành trong năm 2025. Từ tiểu thuyết hấp dẫn đến sách tự giúp đỡ, tất cả đều xứng đáng nằm trong thư viện của bạn...',
-        content: 'Nội dung đầy đủ của bài viết sẽ được hiển thị ở trang chi tiết bài viết...'
-    }
-];
+// Load and render posts from backend API
+let blogPosts = [];
 
-// Render blog posts lên trang
-document.addEventListener('DOMContentLoaded', function() {
-    const blogContainer = document.getElementById('blogContainer');
-    
-    if (blogContainer) {
-        blogPosts.forEach(post => {
-            // Render categories
-            const categoriesHtml = post.category.map(cat => `<span class="blog-category">#${cat}</span>`).join('');
-            
-            const blogPostHTML = `
-                <article class="blog-post">
-                    <div class="blog-content">
-                        <h2 class="blog-title" onclick="readFullPost(${post.id})" style="cursor: pointer;">${post.title}</h2>
-                        <p class="blog-meta">Published ${post.date} - By ${post.author}</p>
-                        <div class="blog-categories">
-                            ${categoriesHtml}
-                        </div>
-                        <p class="blog-description">${post.description}</p>
-                        <div class="blog-actions">
-                            <a href="#" class="btn-read-more" onclick="readFullPost(${post.id}); return false;">Đọc toàn bộ bài viết</a>
-                            <div class="btn-group">
-                                <button type="button" class="btn-like" onclick="likeBlogPost(${post.id}, this)" title="Thích bài viết"><img src="imgs/heart_null.png" alt="Like" style="width: 20px; height: 20px;"></button>
-                                <button type="button" class="btn-save" onclick="saveBlogPost(${post.id}, this)" title="Lưu bài viết"><img src="imgs/save.png" alt="Save" style="width: 20px; height: 20px;"></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="blog-image">
-                        <img src="${post.image}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
-                </article>
-            `;
-            blogContainer.innerHTML += blogPostHTML;
-        });
+async function loadPostsFromAPI() {
+    try {
+        const resp = await fetch(`${window.API_BASE}/posts/`);
+        if (!resp.ok) throw new Error('Failed to fetch posts');
+        const posts = await resp.json();
+        // Map backend shape to frontend shape
+        blogPosts = posts.map((p, idx) => ({
+            id: p.id,
+            title: p.title,
+            slug: p.slug,
+            author: p.author || 'Unknown',
+            date: new Date(p.published_at || Date.now()).toLocaleDateString('en-US').toUpperCase(),
+            category: p.category ? [p.category] : [],
+            image: `imgs/anhBlog${(idx % 4) + 1}.jpg`, // fallback local images
+            description: p.excerpt || '',
+            content: p.content || ''
+        }));
+        renderBlogPosts();
+    } catch (err) {
+        console.error('Error loading posts', err);
+        const blogContainer = document.getElementById('blogContainer');
+        if (blogContainer) blogContainer.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">Không tải được bài viết, thử tải lại</p>';
     }
+}
+
+// Render blog posts on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+    loadPostsFromAPI();
 });
 
 // Hàm xem bài viết đầy đủ
 function readFullPost(postId) {
-    const post = blogPosts.find(p => p.id === postId);
-    if (post) {
-        // Lưu bài viết vào localStorage để hiển thị trên trang chi tiết
-        localStorage.setItem('selectedPost', JSON.stringify(post));
-        // Chuyển hướng tới trang chi tiết
-        window.location.href = 'post-detail.html';
-    }
+    window.location.href = `post-detail.html?id=${postId}`;
 }
 
-// Hàm để lại bình luận
-function goToComments(postId) {
-    const post = blogPosts.find(p => p.id === postId);
-    if (post) {
-        alert(`Hệ thống bình luận cho bài: "${post.title}" sẽ được tạo sau.`);
+// Hàm lưu bài viết (gọi backend saved endpoints). btn is the button element
+async function saveBlogPost(postId, btn) {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
+        alert('Vui lòng đăng nhập để lưu bài viết');
+        return;
     }
-}
-
-// Hàm lưu bài viết
-function saveBlogPost(postId, btn) {
-    const post = blogPosts.find(p => p.id === postId);
-    if (post) {
-        // Lấy bài viết đã lưu từ localStorage
-        let savedPosts = JSON.parse(localStorage.getItem('savedPosts')) || [];
-        
-        // Kiểm tra xem bài viết đã được lưu chưa
-        const isAlreadySaved = savedPosts.some(p => p.id === postId);
-        
-        if (isAlreadySaved) {
-            // Nếu đã lưu, xóa khỏi danh sách lưu
-            savedPosts = savedPosts.filter(p => p.id !== postId);
+    try {
+        // Toggle: try to save, if already saved endpoint will ignore, but we need to check current saved state
+        // For simplicity, call GET /saved/me to decide
+        const savedResp = await fetch(`${window.API_BASE}/saved/me`, { credentials: 'include' });
+        let saved = [];
+        if (savedResp.ok) saved = await savedResp.json();
+        const isSaved = saved.some(s => s.id === postId);
+        if (isSaved) {
+            await fetch(`${window.API_BASE}/saved/posts/${postId}/save`, { method: 'DELETE', credentials: 'include' });
             btn.classList.remove('saved');
-            alert(`Đã xóa bài: "${post.title}" khỏi danh sách lưu`);
+            alert('Đã xóa khỏi danh sách lưu');
         } else {
-            // Nếu chưa lưu, thêm vào danh sách lưu
-            savedPosts.push(post);
+            await fetch(`${window.API_BASE}/saved/posts/${postId}/save`, { method: 'POST', credentials: 'include' });
             btn.classList.add('saved');
-            alert(`Đã lưu bài: "${post.title}" để dành đọc sau`);
+            alert('Đã lưu bài viết');
         }
-        
-        // Lưu vào localStorage
-        localStorage.setItem('savedPosts', JSON.stringify(savedPosts));
+    } catch (err) {
+        console.error('Save post error', err);
+        alert('Lưu bài thất bại, thử lại');
     }
 }
 
-// Hàm like/unlike bài viết
+// Hàm like/unlike bài viết (client-side only - không cần backend)
 function likeBlogPost(postId, btn) {
     const post = blogPosts.find(p => p.id === postId);
     if (post) {
-        // Lấy bài viết đã like từ localStorage
         let likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || [];
-        
-        // Kiểm tra xem bài viết đã được like chưa
         const isAlreadyLiked = likedPosts.some(p => p.id === postId);
         
         if (isAlreadyLiked) {
-            // Nếu đã like, xóa khỏi danh sách like
             likedPosts = likedPosts.filter(p => p.id !== postId);
             btn.classList.remove('liked');
             btn.querySelector('img').src = 'imgs/heart_null.png';
         } else {
-            // Nếu chưa like, thêm vào danh sách like
             likedPosts.push(post);
             btn.classList.add('liked');
             btn.querySelector('img').src = 'imgs/heart.png';
         }
         
-        // Lưu vào localStorage
         localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
     }
 }

@@ -72,17 +72,27 @@ registerForm.addEventListener('submit', function(e) {
     
     // If validation passes
     if (isValid) {
-        // Lưu user vào localStorage
-        const userData = {
-            email: emailInput.value,
-            password: passwordInput.value
-        };
-        localStorage.setItem('currentUser', JSON.stringify(userData));
-        localStorage.setItem('isLoggedIn', 'true');
-        
-        alert('Đăng ký thành công!');
-        // Redirect to index page
-        window.location.href = 'index.html';
+        try {
+            const resp = await fetch(`${window.API_BASE}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ email: emailInput.value, password: passwordInput.value, full_name: '' })
+            });
+            if (!resp.ok) {
+                const data = await resp.json().catch(() => ({}));
+                alert(data.message || 'Đăng ký thất bại');
+                return;
+            }
+            const data = await resp.json();
+            // Backend sets cookie and returns user info
+            localStorage.setItem('currentUser', JSON.stringify({ id: data.id, email: data.email, full_name: data.full_name }));
+            localStorage.setItem('isLoggedIn', 'true');
+            alert('Đăng ký thành công!');
+            window.location.href = 'index.html';
+        } catch (err) {
+            alert('Lỗi mạng, thử lại sau');
+        }
     }
 });
 

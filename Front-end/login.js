@@ -66,19 +66,30 @@ loginForm.addEventListener('submit', function(e) {
         return;
     }
     
-    // Nếu cả 2 đều có giá trị và email hợp lệ -> đăng nhập thành công (tạm thời)
-    // Lưu user vào localStorage
-    const userData = {
-        email: emailInput.value,
-        password: passwordInput.value,
-        remember: document.getElementById('remember').checked
-    };
-    localStorage.setItem('currentUser', JSON.stringify(userData));
-    localStorage.setItem('isLoggedIn', 'true');
+    // Kiểm tra nếu là admin
+    const adminEmail = 'admin@gmail.com';
+    const adminPassword = 'admin';
     
-    // Hiển thị thành công và chuyển trang
-    alert('Đăng nhập thành công!');
-    window.location.href = 'index.html';
+    if (emailInput.value === adminEmail && passwordInput.value === adminPassword) {
+        // Đăng nhập admin
+        localStorage.setItem('isAdminLoggedIn', 'true');
+        localStorage.setItem('adminEmail', emailInput.value);
+        alert('Đăng nhập admin thành công!');
+        window.location.href = 'admin.html';
+    } else {
+        // Đăng nhập user thường
+        const userData = {
+            email: emailInput.value,
+            password: passwordInput.value,
+            remember: document.getElementById('remember').checked
+        };
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        localStorage.setItem('isLoggedIn', 'true');
+        
+        // Hiển thị thành công và chuyển trang
+        alert('Đăng nhập thành công!');
+        window.location.href = 'index.html';
+    }
 });
 
 // Email validation helper

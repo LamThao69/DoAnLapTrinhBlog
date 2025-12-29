@@ -37,6 +37,27 @@ app.use(express.json());
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
+// Temporary endpoint to run migrations and seeds (call once, then remove)
+app.get('/admin/setup-db', async (req, res) => {
+  try {
+    const knexConfig = require('../knexfile');
+    const knexInstance = require('knex')(knexConfig);
+    
+    // Run migrations
+    await knexInstance.migrate.latest();
+    
+    // Run seeds
+    await knexInstance.seed.run();
+    
+    await knexInstance.destroy();
+    
+    res.json({ success: true, message: 'Database setup complete: migrations and seeds ran successfully' });
+  } catch (error) {
+    console.error('Setup DB error:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 app.use('/auth', authRoutes);
 app.use('/posts', postsRoutes);
 app.use('/categories', require('./routes/categories'));

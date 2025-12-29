@@ -17,6 +17,7 @@ const allowedOrigins = [
   'http://localhost',
   'http://localhost:3000',
   'http://localhost:5173',
+  'https://blog-frontend-qd12.onrender.com',
   FRONTEND_URL
 ].filter(url => url !== 'http://localhost' || FRONTEND_URL === 'http://localhost');
 

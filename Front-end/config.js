@@ -18,7 +18,7 @@ const API_BASE = (() => {
   
   if (hostname.includes('render')) {
     // Auto-detect: if frontend is on render, backend should also be on render
-    const backendUrl = 'https://blog-backend-xyz.onrender.com'; // ← UPDATE THIS
+    const backendUrl = 'https://blog-backend-hlje.onrender.com';
     return backendUrl;
   }
   

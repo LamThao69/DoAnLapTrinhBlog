@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Green&&Blue</title>
+    <link rel="stylesheet" href="../styles/register.css">
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-box">
+            <!-- Logo -->
+            <div class="logo-register">
+                <a href="index.html"><img src="../assets/imgs/logo.png" alt="" width="70px"></a>
+            </div>
+            
+            <!-- Title -->
+            <h1 class="register-title">
+                Đăng ký vào <span class="green">Green</span><span class="organce">&&</span><span class="blue">Blue</span>
+            </h1>
+            
+            <!-- Register Form -->
+            <form class="register-form" id="registerForm" novalidate>
+                <!-- Email Input -->
+                <div class="input-group">
+                    <input type="email" id="email" placeholder="Email">
+                    <span class="input-icon">
+                        <img src="../assets/imgs/user.png" alt="User">
+                    </span>
+                    <span class="error-message" id="emailError">Email không hợp lệ / Email đã tồn tại</span>
+                </div>
+                
+                <!-- Password Input -->
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password">
+                    <span class="input-icon toggle-password" data-target="password">
+                        <img src="../assets/imgs/hidden.png" alt="Toggle Password" class="eye-icon">
+                    </span>
+                    <span class="error-message" id="passwordError">Password cần ít nhất 8 ký tự</span>
+                </div>
+                
+                <!-- Confirm Password Input -->
+                <div class="input-group">
+                    <input type="password" id="confirmPassword" placeholder="Nhập lại Password">
+                    <span class="input-icon toggle-password" data-target="confirmPassword">
+                        <img src="../assets/imgs/hidden.png" alt="Toggle Password" class="eye-icon">
+                    </span>
+                    <span class="error-message" id="confirmPasswordError">Password không khớp</span>
+                </div>
+                
+                <!-- Register Button -->
+                <button type="submit" class="register-btn">Đăng Ký</button>
+                
+                <!-- Login Link -->
+                <p class="login-text">
+                    Đã có tài khoản? <a href="login.html" class="login-link">Đăng nhập</a>
+                </p>
+            </form>
+        </div>
+    </div>
+    
+    <script src="../scripts/register.js"></script>
+</body>
+</html>

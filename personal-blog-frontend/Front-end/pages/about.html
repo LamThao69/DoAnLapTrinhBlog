@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Về chúng tôi - Green&&Blue</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/about.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo"> <a href="index.html"><img src="../assets/imgs/logo.png" alt="" width="60px"></a></div>
+            <div class="logo-section">
+                    <h1 class="site-title" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                        <span class="green">Green</span><span class="organce">&&</span><span class="blue">Blue</span>
+                    </h1>
+            </div>
+            <div class="header-actions">
+                <button class="login-btn" onclick="window.location.href='login.html'">Đăng nhập</button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <ul class="menu">
+                <li data-page="index.html"><a href="index.html">Trang chủ</a></li>
+                <li class="category-menu">
+                    <a href="#" class="category-toggle">Thể loại+</a>
+                    <ul class="category-dropdown" id="categoryDropdown">
+                        <li><a href="#" class="category-filter" data-category="all">Tất cả</a></li>
+                        <li><a href="#" class="category-filter" data-category="DoiSong">Đời sống</a></li>
+                        <li><a href="#" class="category-filter" data-category="LoiSong">Lối sống</a></li>
+                        <li><a href="#" class="category-filter" data-category="KhoaHoc">Khoa học</a></li>
+                        <li><a href="#" class="category-filter" data-category="SucKhoe">Sức khỏe</a></li>
+                        <li><a href="#" class="category-filter" data-category="CongNghe">Công nghệ</a></li>
+                        <li><a href="#" class="category-filter" data-category="KienThuc">Kiến thức</a></li>
+                        <li><a href="#" class="category-filter" data-category="TamLy">Tâm lý</a></li>
+                    </ul>
+                </li>
+                <li data-page="about.html"><a href="about.html">Về chúng tôi</a></li>
+                <li data-page="contact.html"><a href="contact.html">Liên hệ</a></li>
+            </ul>
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                </div>
+                <span class="search-icon">🔍</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="about-main">
+            <!-- Logo PTIT -->
+            <div class="about-logo">
+                <img src="../assets/imgs/logo_PTIT.jpg" alt="PTIT Logo">
+            </div>
+
+            <!-- School Name -->
+            <h1 class="school-name">Học Viện Công Nghệ Bưu Chính Viễn Thông</h1>
+
+            <!-- Course Info -->
+            <div class="course-info">
+                <p class="course-name">Môn Lập trình Web</p>
+                <p class="project-title">Đề tài: Xây dựng Website dạng Blog</p>
+            </div>
+
+            <!-- Team Members -->
+            <section class="team-section">
+                <h2>Các thành viên trong nhóm</h2>
+                <div class="team-members">
+                    <!-- Member 1 -->
+                    <div class="member-card">
+                        <div class="member-avatar">
+                            <img src="../assets/imgs/anhThao.jpg" alt="Lâm Trung Thảo">
+                        </div>
+                        <h3 class="member-name">Lâm Trung Thảo</h3>
+                        <p class="member-id">N22DCAT049</p>
+                        <p class="member-role">Thiết kế Front-end</p>
+                    </div>
+
+                    <!-- Member 2 -->
+                    <div class="member-card">
+                        <div class="member-avatar">
+                            <img src="../assets/imgs/anhBao.jpg" alt="Tạ Lê Anh Bảo">
+                        </div>
+                        <h3 class="member-name">Tạ Lê Anh Bảo</h3>
+                        <p class="member-id">N22DCAT008</p>
+                        <p class="member-role">Thiết kế Database và API</p>
+                    </div>
+
+                    <!-- Member 3 -->
+                    <div class="member-card">
+                        <div class="member-avatar">
+                            <img src="../assets/imgs/anhToan.jpg" alt="Bùi Trung Toán">
+                        </div>
+                        <h3 class="member-name">Bùi Trung Toán</h3>
+                        <p class="member-id">N22DCAT058</p>
+                        <p class="member-role">Xây dựng Back-end</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../scripts/blog.js"></script>
+    <script src="../scripts/index.js"></script>
+    <script>
+        // Thiết lập menu active cho trang này
+        if (typeof setActiveMenu === 'function') {
+            setActiveMenu();
+        }
+        
+        // Xử lý click vào category toggle để hiển thị/ẩn dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryToggle = document.querySelector('.category-toggle');
+            const categoryMenu = document.querySelector('.category-menu');
+            
+            if (categoryToggle && categoryMenu) {
+                categoryToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    categoryMenu.classList.toggle('active');
+                });
+                
+                // Đóng dropdown khi click ra ngoài
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.category-menu')) {
+                        categoryMenu.classList.remove('active');
+                    }
+                });
+            }
+            
+            const categoryFilters = document.querySelectorAll('.category-filter');
+            categoryFilters.forEach(filter => {
+                filter.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    // Lưu category được chọn vào localStorage
+                    localStorage.setItem('selectedCategory', category);
+                    // Chuyển về trang index
+                    window.location.href = 'index.html';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

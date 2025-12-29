@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết bài viết - Green&&Blue</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/post-detail.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo"> <a href="index.html"><img src="../assets/imgs/logo.png" alt="" width="60px"></a></div>
+            <div class="logo-section">
+                    <h1 class="site-title" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                        <span class="green">Green</span><span class="organce">&&</span><span class="blue">Blue</span>
+                    </h1>
+            </div>
+            <div class="header-actions">
+                <button class="login-btn" onclick="window.location.href='login.html'">Đăng nhập</button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <ul class="menu">
+                <li data-page="index.html"><a href="index.html">Trang chủ</a></li>
+                <li class="category-menu">
+                    <a href="#" class="category-toggle">Thể loại+</a>
+                    <ul class="category-dropdown" id="categoryDropdown">
+                        <li><a href="#" class="category-filter" data-category="all">Tất cả</a></li>
+                        <li><a href="#" class="category-filter" data-category="DoiSong">Đời sống</a></li>
+                        <li><a href="#" class="category-filter" data-category="LoiSong">Lối sống</a></li>
+                        <li><a href="#" class="category-filter" data-category="KhoaHoc">Khoa học</a></li>
+                        <li><a href="#" class="category-filter" data-category="SucKhoe">Sức khỏe</a></li>
+                        <li><a href="#" class="category-filter" data-category="CongNghe">Công nghệ</a></li>
+                        <li><a href="#" class="category-filter" data-category="KienThuc">Kiến thức</a></li>
+                        <li><a href="#" class="category-filter" data-category="TamLy">Tâm lý</a></li>
+                    </ul>
+                </li>
+                <li data-page="about.html"><a href="about.html">Về chúng tôi</a></li>
+                <li data-page="contact.html"><a href="contact.html">Liên hệ</a></li>
+            </ul>
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                </div>
+                <span class="search-icon">🔍</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="post-detail-main">
+            <!-- Back Button -->
+            <a href="index.html" class="btn-back">
+                <img src="../assets/imgs/arrow.png" alt="Quay lại" style="width: 24px; height: 24px;">
+            </a>
+
+            <!-- Post Content -->
+            <article class="post-detail-article" id="postDetail">
+                <!-- Post content sẽ được thêm vào đây bằng JavaScript -->
+            </article>
+
+            <!-- Comments Section -->
+            <section class="comments-section">
+                <h2>Bình luận</h2>
+                <div id="commentFormContainer" class="comment-form-container">
+                    <!-- Form will be inserted here by JavaScript based on login status -->
+                </div>
+                <div id="commentsList" class="comments-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../scripts/index.js"></script>
+    <script src="../scripts/blog.js"></script>
+    <script src="../scripts/post-detail.js"></script>
+</body>
+</html>

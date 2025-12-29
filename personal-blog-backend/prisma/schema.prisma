@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  displayName   String?
+  password      String
+  gender        String?   @default("OTHER") // MALE, FEMALE, OTHER
+  phoneNumber   String?
+  address       String?
+  birthYear     Int?
+  avatar        String?   @db.NVarChar(Max)
+  role          String    @default("USER") // USER, ADMIN
+  createdAt     DateTime  @default(now())
+
+  posts         Post[]
+  comments      Comment[]
+  likes         Like[]
+  savedPosts    SavedPost[] @relation("UserSavedPosts")
+  resetTokens   PasswordResetToken[]
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  slug  String @unique
+  posts Post[]
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  image       String?   @db.NVarChar(Max)
+  content     String    @db.NVarChar(Max)
+  slug        String    @unique
+  published   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  author      User      @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  authorId    Int
+
+  category    Category?  @relation(fields: [categoryId], references: [id])
+  categoryId  Int?
+
+  comments    Comment[]
+  likes       Like[]
+  savedBy     SavedPost[]
+}
+
+model SavedPost {
+  id        Int       @id @default(autoincrement())
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserSavedPosts")
+  userId    Int
+  createdAt DateTime  @default(now())
+
+  @@unique([postId, userId])
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  content   String    @db.NVarChar(500)
+  createdAt DateTime  @default(now())
+
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+
+  author    User      @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  authorId  Int
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userId    Int
+
+  @@unique([postId, userId])
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+}
+

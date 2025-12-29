@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Green&&Blue</title>
+    <link rel="stylesheet" href="../styles/admin.css">
+</head>
+<body>
+    <!-- Admin Login Check Screen -->
+    <div id="adminCheckScreen" style="display: none; text-align: center; padding: 40px;">
+        <p>Bạn cần đăng nhập bằng tài khoản admin để truy cập trang này.</p>
+        <p><a href="login.html">Quay lại trang đăng nhập</a></p>
+    </div>
+
+    <!-- Admin Dashboard Screen -->
+    <div id="adminDashboard" style="display: none;">
+        <!-- Header with Logo -->
+        <header class="admin-header">
+            <div class="admin-header-content">
+                <div class="header-left">
+                    <div class="logo">
+                        <a href="admin.html"><img src="../assets/imgs/logo.png" alt="Logo" width="50px"></a>
+                    </div>
+                    <h1 class="admin-title">
+                        <span class="green">Green</span><span class="organce">&&</span><span class="blue">Blue</span>
+                    </h1>
+                </div>
+                <div class="header-right">
+                    <span class="admin-user" id="adminUserInfo">Admin</span>
+                    <button class="logout-btn" onclick="adminLogout()">Đăng xuất</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="admin-nav">
+            <div class="nav-container">
+                <ul class="nav-tabs">
+                    <li><a href="#" class="nav-link active" data-tab="users">👥 Quản lý Tài khoản</a></li>
+                    <li><a href="#" class="nav-link" data-tab="posts">📝 Quản lý Bài viết</a></li>
+                    <li><a href="#" class="nav-link" data-tab="categories">🏷️ Quản lý Danh mục</a></li>
+                    <li><a href="#" class="nav-link" data-tab="admins">🔑 Quản lý Admin</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Users Management Tab -->
+            <section id="users-tab" class="admin-tab active">
+                <div class="tab-header">
+                    <h2>Quản lý Tài khoản Người dùng</h2>
+                    <div class="tab-actions">
+                        <input type="text" id="userSearchBox" placeholder="Tìm kiếm user..." class="search-input">
+                    </div>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Tên người dùng</th>
+                            <th>Địa chỉ</th>
+                            <th>Số điện thoại</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users sẽ được thêm vào đây -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Posts Management Tab -->
+            <section id="posts-tab" class="admin-tab">
+                <div class="tab-header">
+                    <h2>Quản lý Bài viết</h2>
+                    <div class="tab-actions">
+                        <button class="btn-add" onclick="openAddPostModal()">+ Thêm bài viết</button>
+                        <input type="text" id="postSearchBox" placeholder="Tìm kiếm bài viết..." class="search-input">
+                    </div>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tiêu đề</th>
+                            <th>Tác giả</th>
+                            <th>Danh mục</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="postsTableBody">
+                        <!-- Posts sẽ được thêm vào đây -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Categories Management Tab -->
+            <section id="categories-tab" class="admin-tab">
+                <div class="tab-header">
+                    <h2>Quản lý Danh mục Bài viết</h2>
+                    <div class="tab-actions">
+                        <button class="btn-add" onclick="openAddCategoryModal()">+ Thêm danh mục</button>
+                    </div>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên danh mục</th>
+                            <th>Số bài viết</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoriesTableBody">
+                        <!-- Categories sẽ được thêm vào đây -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Admins Management Tab -->
+            <section id="admins-tab" class="admin-tab">
+                <div class="tab-header">
+                    <h2>Quản lý Tài khoản Admin</h2>
+                    <div class="tab-actions">
+                        <button class="btn-add" onclick="openAddAdminModal()">+ Thêm admin</button>
+                    </div>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Ngày tạo</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminsTableBody">
+                        <!-- Admins sẽ được thêm vào đây -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Add/Edit Post -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePostModal()">&times;</span>
+            <h2 id="postModalTitle">Thêm bài viết mới</h2>
+            <form id="postForm">
+                <div class="form-group">
+                    <label>Tiêu đề</label>
+                    <input type="text" id="postTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Tác giả</label>
+                    <input type="text" id="postAuthor" required>
+                </div>
+                <div class="form-group">
+                    <label>Danh mục</label>
+                    <select id="postCategory" required>
+                        <option value="">-- Chọn danh mục --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ảnh (URL hoặc Tải lên)</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="postImage" placeholder="Nhập URL ảnh..." style="flex: 1;">
+                        <input type="file" id="postImageFile" accept="image/*" style="display: none;">
+                        <button type="button" class="btn-upload-image" onclick="document.getElementById('postImageFile').click()">📁 Chọn ảnh</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả</label>
+                    <textarea id="postDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Nội dung</label>
+                    <textarea id="postContent" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="postVisible" checked>
+                        Hiển thị bài viết
+                    </label>
+                </div>
+                <button type="submit" class="btn-save">Lưu bài viết</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Add/Edit Category -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCategoryModal()">&times;</span>
+            <h2 id="categoryModalTitle">Thêm danh mục mới</h2>
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label>Tên danh mục</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <button type="submit" class="btn-save">Lưu danh mục</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Add/Edit Admin -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdminModal()">&times;</span>
+            <h2 id="adminModalTitle">Thêm tài khoản Admin</h2>
+            <form id="adminForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="newAdminEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" id="newAdminPassword" required>
+                </div>
+                <button type="submit" class="btn-save">Lưu admin</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Edit User -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUserModal()">&times;</span>
+            <h2>Sửa thông tin User</h2>
+            <form id="userForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="editUserEmail" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Tên người dùng</label>
+                    <input type="text" id="editUserName">
+                </div>
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input type="text" id="editUserAddress">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="tel" id="editUserPhone">
+                </div>
+                <button type="submit" class="btn-save">Lưu thay đổi</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../scripts/admin.js"></script>
+</body>
+</html>

@@ -30,5 +30,3 @@ const API_BASE = (() => {
 window.API_BASE = API_BASE;
 console.log('[Config] Using API_BASE:', API_BASE);
 
-export { API_BASE };
-
